@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: webflux-crud
+  
+  config:
+    import: optional:file:.env[.properties]
+
+  r2dbc:
+    url: ${DATABASE_URL:r2dbc:postgresql://localhost:5432/testdb}
+    username: ${POSTGRES_USER:admin}
+    password: ${POSTGRES_PASSWORD:admin}
