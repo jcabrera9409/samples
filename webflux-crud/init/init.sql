@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS alumnos (
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
     edad INT,
-    email VARCHAR(150) UNIQUE
+    email VARCHAR(150)
 );
 
 -- Insertar registros de ejemplo
