@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.webflux.test.model.Alumno;
+import com.webflux.test.dto.AlumnoRequestDTO;
+import com.webflux.test.dto.AlumnoResponseDTO;
 import com.webflux.test.service.IAlumnoService;
 
 import reactor.core.publisher.Flux;
@@ -30,37 +31,37 @@ public class AlumnoController {
 
 
     @PostMapping
-    public  Mono<ResponseEntity<Alumno>> crearAlumno(@RequestBody Alumno alumno) {
-        Mono<Alumno> alumnoCreado = alumnoService.create(alumno);
+    public  Mono<ResponseEntity<AlumnoResponseDTO>> crearAlumno(@RequestBody AlumnoRequestDTO alumno) {
+        Mono<AlumnoResponseDTO> alumnoCreado = alumnoService.create(alumno);
         return alumnoCreado.map(alumnoResp -> ResponseEntity.status(HttpStatus.CREATED).body(alumnoResp));
     }
 
-    @PutMapping
-    public Mono<ResponseEntity<Alumno>> actualizarAlumno(@RequestBody Alumno alumno) {
-        Mono<Alumno> alumnoActualizado = alumnoService.update(alumno);
+    @PutMapping("/{id}")
+    public Mono<ResponseEntity<AlumnoResponseDTO>> actualizarAlumno(@PathVariable Long id, @RequestBody AlumnoRequestDTO alumno) {
+        Mono<AlumnoResponseDTO> alumnoActualizado = alumnoService.update(id, alumno);
         return alumnoActualizado.map(alumnoResp -> ResponseEntity.ok(alumnoResp));
     }
 
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Void>> eliminarAlumno(@PathVariable Long id) {
-        alumnoService.delete(id);
-        return Mono.just(ResponseEntity.noContent().build());
+        return alumnoService.delete(id)
+                .then(Mono.just(ResponseEntity.noContent().build()));
     }
 
     @GetMapping("/{id}")
-    public Mono<ResponseEntity<Alumno>> obtenerAlumnoPorId(@PathVariable Long id) {
-        Mono<Alumno> alumno = alumnoService.findById(id);
+    public Mono<ResponseEntity<AlumnoResponseDTO>> obtenerAlumnoPorId(@PathVariable Long id) {
+        Mono<AlumnoResponseDTO> alumno = alumnoService.findById(id);
         return alumno.map(alumnoResp -> ResponseEntity.ok(alumnoResp))
                      .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @GetMapping
-    public Flux<Alumno> obtenerTodosLosAlumnos() {
+    public Flux<AlumnoResponseDTO> obtenerTodosLosAlumnos() {
         return alumnoService.findAll();
     }
 
     @GetMapping(path = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Alumno> streamAlumnos() {
+    public Flux<AlumnoResponseDTO> streamAlumnos() {
         return alumnoService.findAll()
             .delayElements(Duration.ofMillis(500));
     }

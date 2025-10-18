@@ -1,14 +1,15 @@
 package com.webflux.test.service;
 
-import com.webflux.test.model.Alumno;
+import com.webflux.test.dto.AlumnoRequestDTO;
+import com.webflux.test.dto.AlumnoResponseDTO;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IAlumnoService {
-    Mono<Alumno> create(Alumno alumno);
-    Mono<Alumno> update(Alumno alumno);
+    Mono<AlumnoResponseDTO> create(AlumnoRequestDTO alumno);
+    Mono<AlumnoResponseDTO> update(Long id,AlumnoRequestDTO alumno);
     Mono<Void> delete(Long id);
-    Mono<Alumno> findById(Long id);
-    Flux<Alumno> findAll();
+    Mono<AlumnoResponseDTO> findById(Long id);
+    Flux<AlumnoResponseDTO> findAll();
 }
