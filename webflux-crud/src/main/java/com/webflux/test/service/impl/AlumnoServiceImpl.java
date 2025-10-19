@@ -10,10 +10,12 @@ import com.webflux.test.model.Alumno;
 import com.webflux.test.repository.IAlumnoRepository;
 import com.webflux.test.service.IAlumnoService;
 
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
+@Slf4j
 public class AlumnoServiceImpl implements IAlumnoService {
 
     private final IAlumnoRepository alumnoRepository;
@@ -26,6 +28,8 @@ public class AlumnoServiceImpl implements IAlumnoService {
     public Mono<AlumnoResponseDTO> create(AlumnoRequestDTO alumno) {
         Alumno nuevoAlumno = AlumnoMapper.toEntity(alumno);
         return alumnoRepository.save(nuevoAlumno)
+                .doOnSuccess(saved -> log.info("Alumno creado con ID: {}", saved.getId()))
+                .doOnError(error -> log.error("Error al crear alumno: {}", error.getMessage()))
                 .map(AlumnoMapper::toResponseDTO);
     }
 
@@ -35,6 +39,8 @@ public class AlumnoServiceImpl implements IAlumnoService {
                 .switchIfEmpty(Mono.error(new AlumnoNotFoundException(id)))
                 .then(Mono.just(AlumnoMapper.toEntity(id, alumno)))
                 .flatMap(alumnoRepository::save)
+                .doOnSuccess(saved -> log.info("Alumno actualizado con ID: {}", saved.getId()))
+                .doOnError(error -> log.error("Error al actualizar alumno: {}", error.getMessage()))
                 .map(AlumnoMapper::toResponseDTO);
     }
 
