@@ -2,7 +2,6 @@ package com.webflux.test.controller;
 
 import java.time.Duration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +28,11 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/alumnos")
 public class AlumnoController {
 
-    @Autowired
-    private IAlumnoService alumnoService;
+    private final IAlumnoService alumnoService;
 
+    public AlumnoController(IAlumnoService alumnoService) {
+        this.alumnoService = alumnoService;
+    }
 
     @PostMapping
     public Mono<ResponseEntity<AlumnoResponseDTO>> crearAlumno(@Valid @RequestBody AlumnoRequestDTO alumno) {
