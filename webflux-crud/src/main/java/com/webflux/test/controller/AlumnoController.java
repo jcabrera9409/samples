@@ -18,6 +18,9 @@ import com.webflux.test.dto.AlumnoRequestDTO;
 import com.webflux.test.dto.AlumnoResponseDTO;
 import com.webflux.test.service.IAlumnoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
@@ -25,7 +28,7 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
-@RequestMapping("/alumnos")
+@RequestMapping("/api/v1/alumnos")
 public class AlumnoController {
 
     private final IAlumnoService alumnoService;
@@ -35,6 +38,8 @@ public class AlumnoController {
     }
 
     @PostMapping
+    @Tag(name = "Alumnos", description = "Operaciones relacionadas con alumnos")
+    @Operation(summary = "Crear un nuevo alumno", description = "Crea un nuevo alumno con los datos proporcionados")
     public Mono<ResponseEntity<AlumnoResponseDTO>> crearAlumno(@Valid @RequestBody AlumnoRequestDTO alumno) {
         log.info("Creando alumno: {}", alumno);
         Mono<AlumnoResponseDTO> alumnoCreado = alumnoService.create(alumno);
@@ -42,6 +47,8 @@ public class AlumnoController {
     }
 
     @PutMapping("/{id}")
+    @Tag(name = "Alumnos", description = "Operaciones relacionadas con alumnos")
+    @Operation(summary = "Actualizar un alumno existente", description = "Actualiza un alumno existente con los datos proporcionados")
     public Mono<ResponseEntity<AlumnoResponseDTO>> actualizarAlumno(@PathVariable Long id, @Valid @RequestBody AlumnoRequestDTO alumno) {
         log.info("Actualizando alumno con ID {}: {}", id, alumno);
         Mono<AlumnoResponseDTO> alumnoActualizado = alumnoService.update(id, alumno);
@@ -49,6 +56,8 @@ public class AlumnoController {
     }
 
     @DeleteMapping("/{id}")
+    @Tag(name = "Alumnos", description = "Operaciones relacionadas con alumnos")
+    @Operation(summary = "Eliminar un alumno existente", description = "Elimina un alumno existente por su ID")
     public Mono<ResponseEntity<Void>> eliminarAlumno(@PathVariable Long id) {
         log.info("Eliminando alumno con ID {}", id);
         return alumnoService.delete(id)
@@ -56,6 +65,8 @@ public class AlumnoController {
     }
 
     @GetMapping("/{id}")
+    @Tag(name = "Alumnos", description = "Operaciones relacionadas con alumnos")
+    @Operation(summary = "Obtener un alumno por ID", description = "Obtiene un alumno existente por su ID")
     public Mono<ResponseEntity<AlumnoResponseDTO>> obtenerAlumnoPorId(@PathVariable Long id) {
         log.info("Obteniendo alumno con ID {}", id);
         Mono<AlumnoResponseDTO> alumno = alumnoService.findById(id);
@@ -64,12 +75,16 @@ public class AlumnoController {
     }
 
     @GetMapping
+    @Tag(name = "Alumnos", description = "Operaciones relacionadas con alumnos")
+    @Operation(summary = "Obtener todos los alumnos", description = "Obtiene una lista de todos los alumnos")
     public Flux<AlumnoResponseDTO> obtenerTodosLosAlumnos() {
         log.info("Obteniendo todos los alumnos");
         return alumnoService.findAll();
     }
 
     @GetMapping(path = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @Tag(name = "Alumnos", description = "Operaciones relacionadas con alumnos")
+    @Operation(summary = "Transmitir todos los alumnos", description = "Inicia un stream de todos los alumnos")
     public Flux<AlumnoResponseDTO> streamAlumnos() {
         log.info("Iniciando stream de alumnos");
         return alumnoService.findAll()

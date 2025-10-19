@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.webflux.test.dto.AlumnoRequestDTO;
 import com.webflux.test.dto.AlumnoResponseDTO;
 import com.webflux.test.exception.AlumnoNotFoundException;
+import com.webflux.test.mapper.AlumnoMapper;
 import com.webflux.test.model.Alumno;
 import com.webflux.test.repository.IAlumnoRepository;
 import com.webflux.test.service.IAlumnoService;
@@ -23,41 +24,18 @@ public class AlumnoServiceImpl implements IAlumnoService {
 
     @Override
     public Mono<AlumnoResponseDTO> create(AlumnoRequestDTO alumno) {
-        Alumno nuevoAlumno = Alumno.builder()
-                .nombre(alumno.getNombre())
-                .apellido(alumno.getApellido())
-                .edad(alumno.getEdad())
-                .email(alumno.getEmail())
-                .build();
+        Alumno nuevoAlumno = AlumnoMapper.toEntity(alumno);
         return alumnoRepository.save(nuevoAlumno)
-                .map(savedAlumno -> AlumnoResponseDTO.builder()
-                        .id(savedAlumno.getId())
-                        .nombre(savedAlumno.getNombre())
-                        .apellido(savedAlumno.getApellido())
-                        .edad(savedAlumno.getEdad())
-                        .email(savedAlumno.getEmail())
-                        .build());
+                .map(AlumnoMapper::toResponseDTO);
     }
 
     @Override
     public Mono<AlumnoResponseDTO> update(Long id, AlumnoRequestDTO alumno) {
         return alumnoRepository.findById(id)
                 .switchIfEmpty(Mono.error(new AlumnoNotFoundException(id)))
-                .then(Mono.fromCallable(() -> Alumno.builder()
-                        .id(id)
-                        .nombre(alumno.getNombre())
-                        .apellido(alumno.getApellido())
-                        .edad(alumno.getEdad())
-                        .email(alumno.getEmail())
-                        .build()))
+                .then(Mono.just(AlumnoMapper.toEntity(id, alumno)))
                 .flatMap(alumnoRepository::save)
-                .map(savedAlumno -> AlumnoResponseDTO.builder()
-                        .id(savedAlumno.getId())
-                        .nombre(savedAlumno.getNombre())
-                        .apellido(savedAlumno.getApellido())
-                        .edad(savedAlumno.getEdad())
-                        .email(savedAlumno.getEmail())
-                        .build());
+                .map(AlumnoMapper::toResponseDTO);
     }
 
     @Override
@@ -70,25 +48,13 @@ public class AlumnoServiceImpl implements IAlumnoService {
     @Override
     public Mono<AlumnoResponseDTO> findById(Long id) {
         return alumnoRepository.findById(id)
-                .map(alumno -> AlumnoResponseDTO.builder()
-                        .id(alumno.getId())
-                        .nombre(alumno.getNombre())
-                        .apellido(alumno.getApellido())
-                        .edad(alumno.getEdad())
-                        .email(alumno.getEmail())
-                        .build())
+                .map(AlumnoMapper::toResponseDTO)
                 .switchIfEmpty(Mono.error(new AlumnoNotFoundException(id)));
     }
 
     @Override
     public Flux<AlumnoResponseDTO> findAll() {
         return alumnoRepository.findAll()
-                .map(alumno -> AlumnoResponseDTO.builder()
-                        .id(alumno.getId())
-                        .nombre(alumno.getNombre())
-                        .apellido(alumno.getApellido())
-                        .edad(alumno.getEdad())
-                        .email(alumno.getEmail())
-                        .build());
+                .map(AlumnoMapper::toResponseDTO);
     }
 }

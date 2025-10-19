@@ -46,7 +46,7 @@ class AlumnoControllerTest {
 
         // When & Then
         webTestClient.post()
-                .uri("/alumnos")
+                .uri("/api/v1/alumnos")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .exchange()
