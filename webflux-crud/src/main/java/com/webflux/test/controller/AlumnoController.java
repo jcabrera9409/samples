@@ -19,9 +19,12 @@ import com.webflux.test.dto.AlumnoRequestDTO;
 import com.webflux.test.dto.AlumnoResponseDTO;
 import com.webflux.test.service.IAlumnoService;
 
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @RestController
 @RequestMapping("/alumnos")
 public class AlumnoController {
@@ -31,25 +34,29 @@ public class AlumnoController {
 
 
     @PostMapping
-    public  Mono<ResponseEntity<AlumnoResponseDTO>> crearAlumno(@RequestBody AlumnoRequestDTO alumno) {
+    public Mono<ResponseEntity<AlumnoResponseDTO>> crearAlumno(@Valid @RequestBody AlumnoRequestDTO alumno) {
+        log.info("Creando alumno: {}", alumno);
         Mono<AlumnoResponseDTO> alumnoCreado = alumnoService.create(alumno);
         return alumnoCreado.map(alumnoResp -> ResponseEntity.status(HttpStatus.CREATED).body(alumnoResp));
     }
 
     @PutMapping("/{id}")
-    public Mono<ResponseEntity<AlumnoResponseDTO>> actualizarAlumno(@PathVariable Long id, @RequestBody AlumnoRequestDTO alumno) {
+    public Mono<ResponseEntity<AlumnoResponseDTO>> actualizarAlumno(@PathVariable Long id, @Valid @RequestBody AlumnoRequestDTO alumno) {
+        log.info("Actualizando alumno con ID {}: {}", id, alumno);
         Mono<AlumnoResponseDTO> alumnoActualizado = alumnoService.update(id, alumno);
         return alumnoActualizado.map(alumnoResp -> ResponseEntity.ok(alumnoResp));
     }
 
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Void>> eliminarAlumno(@PathVariable Long id) {
+        log.info("Eliminando alumno con ID {}", id);
         return alumnoService.delete(id)
                 .then(Mono.just(ResponseEntity.noContent().build()));
     }
 
     @GetMapping("/{id}")
     public Mono<ResponseEntity<AlumnoResponseDTO>> obtenerAlumnoPorId(@PathVariable Long id) {
+        log.info("Obteniendo alumno con ID {}", id);
         Mono<AlumnoResponseDTO> alumno = alumnoService.findById(id);
         return alumno.map(alumnoResp -> ResponseEntity.ok(alumnoResp))
                      .defaultIfEmpty(ResponseEntity.notFound().build());
@@ -57,11 +64,13 @@ public class AlumnoController {
 
     @GetMapping
     public Flux<AlumnoResponseDTO> obtenerTodosLosAlumnos() {
+        log.info("Obteniendo todos los alumnos");
         return alumnoService.findAll();
     }
 
     @GetMapping(path = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<AlumnoResponseDTO> streamAlumnos() {
+        log.info("Iniciando stream de alumnos");
         return alumnoService.findAll()
             .delayElements(Duration.ofMillis(500));
     }

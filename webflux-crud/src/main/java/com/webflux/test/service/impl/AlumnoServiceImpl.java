@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.webflux.test.dto.AlumnoRequestDTO;
 import com.webflux.test.dto.AlumnoResponseDTO;
+import com.webflux.test.exception.AlumnoNotFoundException;
 import com.webflux.test.model.Alumno;
 import com.webflux.test.repository.IAlumnoRepository;
 import com.webflux.test.service.IAlumnoService;
@@ -38,14 +39,16 @@ public class AlumnoServiceImpl implements IAlumnoService {
 
     @Override
     public Mono<AlumnoResponseDTO> update(Long id, AlumnoRequestDTO alumno) {
-        Alumno alumnoActualizado = Alumno.builder()
-                .id(id)
-                .nombre(alumno.getNombre())
-                .apellido(alumno.getApellido())
-                .edad(alumno.getEdad())
-                .email(alumno.getEmail())
-                .build();
-        return alumnoRepository.save(alumnoActualizado)
+        return alumnoRepository.findById(id)
+                .switchIfEmpty(Mono.error(new AlumnoNotFoundException(id)))
+                .then(Mono.fromCallable(() -> Alumno.builder()
+                        .id(id)
+                        .nombre(alumno.getNombre())
+                        .apellido(alumno.getApellido())
+                        .edad(alumno.getEdad())
+                        .email(alumno.getEmail())
+                        .build()))
+                .flatMap(alumnoRepository::save)
                 .map(savedAlumno -> AlumnoResponseDTO.builder()
                         .id(savedAlumno.getId())
                         .nombre(savedAlumno.getNombre())
@@ -57,7 +60,9 @@ public class AlumnoServiceImpl implements IAlumnoService {
 
     @Override
     public Mono<Void> delete(Long id) {
-        return alumnoRepository.deleteById(id);
+        return alumnoRepository.findById(id)
+                .switchIfEmpty(Mono.error(new AlumnoNotFoundException(id)))
+                .then(alumnoRepository.deleteById(id));
     }
 
     @Override
@@ -69,7 +74,8 @@ public class AlumnoServiceImpl implements IAlumnoService {
                         .apellido(alumno.getApellido())
                         .edad(alumno.getEdad())
                         .email(alumno.getEmail())
-                        .build());
+                        .build())
+                .switchIfEmpty(Mono.error(new AlumnoNotFoundException(id)));
     }
 
     @Override
