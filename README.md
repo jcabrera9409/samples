@@ -59,14 +59,35 @@ A complete reactive REST API for student management. Includes Swagger documentat
 
 ---
 
+### 4. ⚡ Reactive Quarkus Exchange Rate API
+**Location**: [`/reactive-quarkus`](./reactive-quarkus/)
+
+A reactive microservice built with Quarkus that provides currency exchange rate functionality. Demonstrates the power of Quarkus for building high-performance, cloud-native reactive applications.
+
+**Key Features:**
+- ⚡ Reactive programming with Mutiny
+- 🚀 Ultra-fast startup with Quarkus
+- 💾 Hibernate Reactive Panache with MySQL
+- 🐳 Container-ready with Docker support
+- 🔥 Native compilation with GraalVM
+- 🌐 JAX-RS reactive endpoints
+
+**Technologies**: Quarkus 3.27, Mutiny, Hibernate Reactive, MySQL, GraalVM
+
+📖 **[View complete documentation →](./reactive-quarkus/README.md)**
+
+---
+
 ## 🛠️ General Technology Stack
 
 - **Java**: 21
-- **Spring Boot**: 3.x
-- **Frameworks**: Spring MVC, Spring WebFlux
-- **Databases**: PostgreSQL, H2
+- **Frameworks**: Spring Boot 3.x, Spring WebFlux, Spring MVC, Quarkus 3.x
+- **Reactive Libraries**: Spring WebFlux, Mutiny, R2DBC
+- **Databases**: PostgreSQL, MySQL, H2
+- **ORM/Data Access**: Spring Data JPA, Hibernate Reactive Panache, R2DBC
 - **Tools**: Maven, Docker, Lombok
-- **Testing**: JUnit 5, Mockito, WebFlux Test
+- **Testing**: JUnit 5, Mockito, WebFlux Test, REST Assured
+- **Native Compilation**: GraalVM
 
 ## 🚀 Getting Started
 
@@ -83,8 +104,9 @@ A complete reactive REST API for student management. Includes Swagger documentat
 
 3. **Choose your starting point**:
    - **Beginner**: Start with the traditional Spring Boot project
-   - **Intermediate**: Explore the WebFlux CRUD
+   - **Intermediate**: Explore the WebFlux CRUD or Quarkus reactive API
    - **Advanced**: Analyze the external API integration
+   - **Performance-focused**: Try the Quarkus native compilation
 
 ## 📝 Repository Structure
 
@@ -93,6 +115,7 @@ samples/
 ├── springboot/          # Traditional review system
 ├── test/               # Reactive exchange rate API
 ├── webflux-crud/       # Reactive student CRUD
+├── reactive-quarkus/   # Quarkus reactive exchange API
 └── README.md          # This file
 ```
 
