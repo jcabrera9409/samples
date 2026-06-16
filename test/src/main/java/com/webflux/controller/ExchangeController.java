@@ -1,4 +1,4 @@
-package com.webflux.test.controller;
+package com.webflux.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.webflux.test.service.ExchangeService;
+import com.webflux.service.IExchangeService;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -16,9 +16,9 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class ExchangeController {
 
-    private final ExchangeService exchangeService;
+    private final IExchangeService exchangeService;
 
-    public ExchangeController(ExchangeService exchangeService) {
+    public ExchangeController(IExchangeService exchangeService) {
         this.exchangeService = exchangeService;
     }
 

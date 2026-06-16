@@ -1,7 +1,7 @@
-package com.webflux.test.mapper;
+package com.webflux.mapper;
 
-import com.webflux.test.dto.ExternalAPIDTO;
-import com.webflux.test.model.Exchange;
+import com.webflux.dto.ExternalAPIDTO;
+import com.webflux.model.Exchange;
 
 public class ExchangeMapper {
 

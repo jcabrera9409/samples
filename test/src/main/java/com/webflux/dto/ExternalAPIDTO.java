@@ -1,4 +1,4 @@
-package com.webflux.test.dto;
+package com.webflux.dto;
 
 public record ExternalAPIDTO(
     String result,

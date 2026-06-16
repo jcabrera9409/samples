@@ -1,4 +1,4 @@
-package com.webflux.test.model;
+package com.webflux.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;

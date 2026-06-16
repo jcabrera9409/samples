@@ -1,4 +1,4 @@
-package com.webflux.test.service;
+package com.webflux.service;
 
 import reactor.core.publisher.Mono;
 

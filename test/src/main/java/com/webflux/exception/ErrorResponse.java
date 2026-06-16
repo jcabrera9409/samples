@@ -1,4 +1,4 @@
-package com.webflux.test.exception;
+package com.webflux.exception;
 
 import java.time.LocalDateTime;
 import java.util.Map;

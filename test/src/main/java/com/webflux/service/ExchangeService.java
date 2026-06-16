@@ -1,8 +1,8 @@
-package com.webflux.test.service;
+package com.webflux.service;
 
 import org.springframework.stereotype.Service;
 
-import com.webflux.test.repository.ExchangeRepo;
+import com.webflux.repository.ExchangeRepo;
 
 import reactor.core.publisher.Mono;
 

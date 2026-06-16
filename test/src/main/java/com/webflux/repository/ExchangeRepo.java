@@ -1,9 +1,9 @@
-package com.webflux.test.repository;
+package com.webflux.repository;
 
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
 
-import com.webflux.test.model.Exchange;
+import com.webflux.model.Exchange;
 
 import reactor.core.publisher.Mono;
 

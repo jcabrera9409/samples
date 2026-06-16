@@ -14,3 +14,7 @@ spring:
       max-size: 20
       max-idle-time: 30m
       validation-query: SELECT 1
+
+application:
+  external-api:
+    url: https://v6.exchangerate-api.com/v6/${EXTERNAL_API_KEY}/pair/
