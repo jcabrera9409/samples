@@ -27,3 +27,4 @@ logs/
 .env
 postgres_data/
 *.log
+mysql_data/
